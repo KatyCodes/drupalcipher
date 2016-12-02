@@ -22,12 +22,14 @@ function cipher_form() {
         '#title' => 'Words to cipher',
         '#type' => 'textfield',
         '#description' => t(''),
+        '#element_validate' => array('element_validate_phrase'),
     );
 
     $form['shift_value'] = array(
         '#title' => 'How many spots would you like this to be shifted?',
         '#type' => 'textfield',
         '#description' => t(''),
+
     );
 
     $form['shift_direction'] = array(
@@ -52,6 +54,11 @@ function element_validate_direction($element) {
     }
 }
 
+function element_validate_phrase($element) {
+    if (preg_match("/[~@#$%^&\*()_+={}|<>\/\`0-9\\\\]/", $element['#value'])) {
+    form_error($element, t('Please use only letters, or regular punctuation.'));
+    }
+}
 // function cipher_form_submit($form, &$form_state) {
 //
 //     $phrase = $form_state['values']['phrase'];
