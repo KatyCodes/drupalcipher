@@ -2,14 +2,14 @@
 
 function cipher_menu() {
     $items['cipher'] = array(
-        'title' => 'Cipher Me!',
+        'title' => 'Cipher this!',
         'page callback' => 'drupal_get_form',
         'page arguments' => array('cipher_form'),
         'access callback' => TRUE,
         'type' => MENU_NORMAL_ITEM,
     );
         $items['cipher_success_page'] = array(
-        'title' => 'Success',
+        'title' => 'Message Ciphered',
         'page callback' => 'cipher_success',
         'access callback' => TRUE,
         'type' => MENU_CALLBACK,
@@ -64,28 +64,39 @@ function element_validate_phrase($element) {
 }
 
 
-// function cipher_form_submit($form, &$form_state) {
-//
-//     $phrase = $form_state['values']['phrase'];
-//     $shift_value = $form_state['values']['shift_value'];
-//     $shift_direction = $form_state['values']['shift_direction'];
-//
-//     $split_input = str_split($phrase);
-//
-//     $alphabet = 'abcdefghijklmnopqrstuvwxyz';
-//
-//     $answer = array();
-//
-//     for ($i=-1; $i < strlen($phrase) ; $i++) {
-//         if(in_array($phrase, $alphabet)) {
-//             $input_words[$i] = $alphabet[$i+$shift_value];
-//             array_push($answer, $alphabet[$i+$shift_value]);
-//         } else {
-//             array_push($answer, $input_words);
-//         }
-//     }
-//     echo '<pre>';
-//     var_dump($answer);
-//     echo '</pre>';
-//     exit;
-// }
+function cipher_form_submit($form, &$form_state) {
+
+    $phrase = strtolower($form_state['values']['phrase']);
+    $shift_value = $form_state['values']['shift_value'];
+    $shift_direction = $form_state['values']['shift_direction'];
+
+    $split_input = str_split($phrase);
+
+    $alphabet = array('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
+
+    $answer = array();
+
+    foreach($split_input as &$value) {
+        if(in_array($value, $alphabet)) {
+            $index = array_search($value, $alphabet);
+            if($shift_direction === 'right') {
+                if($index + $shift_value > 25) {
+                    $x = 26 - $index;
+                    $index = $shift_value = $x;
+                    $letter = $alphabet[$index];
+                    array_push($answer, $letter);
+                } else {
+                    $index = $index + $shift_value;
+                    $letter = $alphabet[$index];
+                    array_push($answer, $letter);
+                }
+
+            }
+        }
+    }
+    $answer = implode('', $answer);
+    echo '<pre>';
+    var_dump($answer);
+    echo '</pre>';
+    exit;
+}
