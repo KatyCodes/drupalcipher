@@ -23,12 +23,15 @@ function cipher_form() {
         '#type' => 'textfield',
         '#description' => t(''),
         '#element_validate' => array('element_validate_phrase'),
+        '#required' => TRUE,
     );
 
     $form['shift_value'] = array(
         '#title' => 'How many spots would you like this to be shifted?',
         '#type' => 'textfield',
         '#description' => t(''),
+        '#required' => TRUE,
+        '#element_validate' => array('element_validate_integer_positive'),
 
     );
 
@@ -59,6 +62,8 @@ function element_validate_phrase($element) {
     form_error($element, t('Please use only letters, or regular punctuation.'));
     }
 }
+
+
 // function cipher_form_submit($form, &$form_state) {
 //
 //     $phrase = $form_state['values']['phrase'];
