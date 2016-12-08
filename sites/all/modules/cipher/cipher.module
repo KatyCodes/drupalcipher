@@ -3,7 +3,6 @@
 function cipher_menu() {
     $items['cipher'] = array(
         'title' => 'Cipher this!',
-        '#description'=> t('In cryptography, a Caesar cipher, also known as Caesar\'s cipher\, the shift cipher, Caesar\'s code or Caesar shift, is one of the simplest and most widely known encryption techniques. It is a type of substitution cipher in which each letter in the plaintext is replaced by a letter some fixed number of positions down the alphabet. For example, with a left shift of 3, D would be replaced by A, E would become B, and so on. The method is named after Julius Caesar, who used it in his private correspondence.'),
         'page callback' => 'drupal_get_form',
         'page arguments' => array('cipher_form'),
         'access callback' => TRUE,
@@ -73,6 +72,7 @@ function cipher_form_submit($form, &$form_state) {
 
     $split_input = str_split($phrase);
 
+
     $alphabet = array('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
     $answer = array();
     foreach($split_input as &$value) {
@@ -102,16 +102,19 @@ function cipher_form_submit($form, &$form_state) {
                     array_push($answer, $letter);
                 }
             }
+        } elseif ($value === " ") {
+            array_push($answer, '&nbsp');
         } else {
             array_push($answer, $value);
         }
     }
+
     $answer = implode("", $answer);
     $_SESSION['answer'] = $answer;
     $form_state['redirect'] = 'cipher_success';
 }
 
 function cipher_success() {
-    $answer = $_SESSION['answer'];
-    return '<h3>Here is your code: ' . $answer . '</h3>';
+    $output = $_SESSION['answer'];
+    return '<p>Here is your code: ' . $output . '</p>';
 }
